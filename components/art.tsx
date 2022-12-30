@@ -26,9 +26,12 @@ export default function Art() {
 
 
   return (
-    <div>
-      <canvas ref={canvas} width={256} height={256} />
-      <input value={expression} onChange={(e) => setExpression(e.target.value)} />
+    <div className="flex flex-col items-center w-min p-4">
+      <div className="p-2 shadow-lg">
+        <canvas ref={canvas} width={256} height={256} className="w-64"/>
+      </div>
+      <input value={expression} onChange={(e) => setExpression(e.target.value)} 
+        className="px-2 py-1 text-lg tracking-widest mt-2 w-full outline-none border-b-2 border-gray-900 shadow-md"/>
     </div>
   );
 }

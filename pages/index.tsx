@@ -2,6 +2,8 @@ import Art from "../components/art";
 
 export default function Home() {
   return <div>
-    <Art />
+    <div className="h-screen grid place-items-center">
+      <Art />
+    </div>
   </div>;
 }
