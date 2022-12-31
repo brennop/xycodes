@@ -28,7 +28,7 @@ const lookup: Record<string, (state: Expr[]) => Expr[]> = {
   A: ([a, ...s]) => [["abs(", a, ")"], ...s],
   H: ([a, b, ...s]) => [["hypot(", a, ",", b, ")"], ...s],
   F: ([a, ...s]) => [["floor(", a, ")"], ...s],
-  R: ([a, ...s]) => [["round(", a, ")"], ...s],
+  R: ([a, ...s]) => [["sqrt(", a, ")"], ...s],
   D: ([a, ...s]) => [a, a, ...s],
 
   0: (s) => ["0", ...s],

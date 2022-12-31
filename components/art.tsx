@@ -27,11 +27,10 @@ export default function Art({ expression = "xy+", dynamic = true }) {
 
   return (
     <Tilt
-      tiltReverse
       glareEnable
       glarePosition="all"
       gyroscope
-      scale={1.05}
+      scale={1.1}
     >
       <div className="p-3 shadow-lg rounded-lg bg-white">
         <Link href={encodeURIComponent(expression)}>
