@@ -3,7 +3,8 @@ import { useRouter } from 'next/router'
 
 import Art from "../components/art";
 import gallery from "../lib/gallery";
-import { decode, highlight } from "../lib/decode"
+import { decode } from "../lib/decode"
+import Decoded from '../components/decoded';
 
 export default function Home() {
   const router = useRouter()
@@ -29,7 +30,9 @@ export default function Home() {
           onChange={e => setExpression(e.target.value)}
           className="px-2 py-1 text-lg tracking-widest mt-2 w-full outline-none border-b-2 border-gray-900 shadow-md"
         />
-        <p className="text-sm text-gray-500 mt-2" dangerouslySetInnerHTML={{ __html: highlight(decoded) }} />
+        <p className="text-sm text-gray-500 mt-2">
+          {decoded && <Decoded expression={decoded} />}
+        </p>
       </div>
     </div>
     <div className="bg-gray-100">
