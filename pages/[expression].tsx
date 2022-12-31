@@ -30,13 +30,13 @@ export default function Home() {
           onChange={e => setExpression(e.target.value)}
           className="px-2 py-1 text-lg tracking-widest mt-2 w-full outline-none border-b-2 border-gray-900 shadow-md"
         />
-        <p className="text-sm text-gray-500 mt-2">
+        <p className="text-xs text-gray-500 mt-3 max-w-xs">
           {decoded && <Decoded expression={decoded} />}
         </p>
       </div>
     </div>
     <div className="bg-gray-100">
-      <div className="flex gap-4 justify-items-center p-8 overflow-x-scroll">
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(256px,1fr))] justify-items-center gap-4 p-4">
         {gallery.map((expression) => <Art expression={expression} key={expression} dynamic={false} />)}
       </div>
     </div>
