@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/router'
 
 import Art from "../components/art";
 import gallery from "../lib/gallery";
+import { decode, highlight } from "../lib/decode"
 
 export default function Home() {
   const router = useRouter()
@@ -14,15 +15,21 @@ export default function Home() {
     setExpression(initial as string)
   }, [initial])
 
+  const decoded = useMemo(() => {
+    if (expression === undefined) return undefined
+    return decode(expression)
+  }, [expression])
+
   return <div>
     <div className="h-screen grid place-items-center">
-      <div className="flex flex-col items-center w-min p-4">
+      <div className="flex flex-col items-center p-4">
         <Art expression={expression} />
         <input
           value={expression}
           onChange={e => setExpression(e.target.value)}
           className="px-2 py-1 text-lg tracking-widest mt-2 w-full outline-none border-b-2 border-gray-900 shadow-md"
         />
+        <p className="text-sm text-gray-500 mt-2" dangerouslySetInnerHTML={{ __html: highlight(decoded) }} />
       </div>
     </div>
     <div className="bg-gray-100">
