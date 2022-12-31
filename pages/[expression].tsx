@@ -1,18 +1,10 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router'
+
 import Art from "../components/art";
-import { getPage } from "../lib/fauna";
+import gallery from "../lib/gallery";
 
-export async function getServerSideProps() {
-  const expressions = await getPage();
-  return {
-    props: {
-      expressions,
-    },
-  };
-}
-
-export default function Home({ expressions }: { expressions: string[] }) {
+export default function Home() {
   const router = useRouter()
   const { expression: inital } = router.query
 
@@ -30,8 +22,8 @@ export default function Home({ expressions }: { expressions: string[] }) {
       </div>
     </div>
     <div className="bg-gray-100">
-      <div className="flex gap-4 justify-items-center p-8">
-        {expressions.map((expression) => <Art expression={expression} key={expression} />)}
+      <div className="flex gap-4 justify-items-center p-8 overflow-x-scroll">
+        {gallery.map((expression) => <Art expression={expression} key={expression} />)}
       </div>
     </div>
   </div>
