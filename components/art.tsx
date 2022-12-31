@@ -1,11 +1,12 @@
 import { useRef, useEffect } from "react";
+import Link from 'next/link';
 
 import { useSpring, animated } from "@react-spring/web";
 import { useGesture } from "@use-gesture/react";
 
 import { draw } from "../lib/draw";
 
-export default function Art({ expression = "xy+" }) {
+export default function Art({ expression = "xy+", dynamic = true }) {
   const canvas = useRef<HTMLCanvasElement>(null);
 
   const rect = useRef<HTMLDivElement>(null);
@@ -18,13 +19,14 @@ export default function Art({ expression = "xy+" }) {
 
     function render(time: number) {
       if (ctx) draw(ctx, expression, time);
+      if (!dynamic) return;
       frameId = requestAnimationFrame(render);
     }
 
     frameId = requestAnimationFrame(render);
 
     return () => cancelAnimationFrame(frameId);
-  }, [expression]);
+  }, [expression, dynamic]);
 
   const [props, api] = useSpring(() => ({
     rotateX: 0,
@@ -67,7 +69,9 @@ export default function Art({ expression = "xy+" }) {
       {...bind()}
       style={props}
     >
-      <canvas ref={canvas} width={256} height={256} className="w-64" />
+      <Link href={encodeURIComponent(expression)}>
+        <canvas ref={canvas} width={256} height={256} className="w-64" />
+      </Link>
     </animated.div>
   );
 }

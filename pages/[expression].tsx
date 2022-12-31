@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router'
 
 import Art from "../components/art";
@@ -6,9 +6,13 @@ import gallery from "../lib/gallery";
 
 export default function Home() {
   const router = useRouter()
-  const { expression: inital } = router.query
+  const { expression: initial } = router.query
 
-  const [expression, setExpression] = useState<string>(inital as string || "xy+")
+  const [expression, setExpression] = useState<string>(initial as string || "xy+")
+
+  useEffect(() => {
+    setExpression(initial as string)
+  }, [initial])
 
   return <div>
     <div className="h-screen grid place-items-center">
@@ -23,7 +27,7 @@ export default function Home() {
     </div>
     <div className="bg-gray-100">
       <div className="flex gap-4 justify-items-center p-8 overflow-x-scroll">
-        {gallery.map((expression) => <Art expression={expression} key={expression} />)}
+        {gallery.map((expression) => <Art expression={expression} key={expression} dynamic={false} />)}
       </div>
     </div>
   </div>
