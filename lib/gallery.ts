@@ -16,4 +16,7 @@ export default [
   "ii*t4/+Sl*f>2+",
   "iyx*+t4/-Sl*f>4*",
   "iyx++t8/-Sl*S2*f^v3+",
+  //
+  "fwXYH/XYKfP/*t++3&",
+  "xq4-yq4-*t+S3*",
 ]
