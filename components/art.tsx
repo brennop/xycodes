@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import Link from 'next/link';
 
 import Tilt from 'react-parallax-tilt';
@@ -8,6 +8,8 @@ import { draw } from "../lib/draw";
 export default function Art({ expression = "xy+", dynamic = true }) {
   const canvas = useRef<HTMLCanvasElement>(null);
 
+  const [hovering, setHovering] = useState(false);
+
   // schedule a draw on the next frame
   // and return a function to cancel it
   useEffect(() => {
@@ -16,14 +18,16 @@ export default function Art({ expression = "xy+", dynamic = true }) {
 
     function render(time: number) {
       if (ctx) draw(ctx, expression, time);
-      if (!dynamic) return;
+
+      if (!dynamic && !hovering) return;
+
       frameId = requestAnimationFrame(render);
     }
 
     frameId = requestAnimationFrame(render);
 
     return () => cancelAnimationFrame(frameId);
-  }, [expression, dynamic]);
+  }, [expression, dynamic, hovering]);
 
   return (
     <Tilt
@@ -31,6 +35,8 @@ export default function Art({ expression = "xy+", dynamic = true }) {
       glarePosition="all"
       gyroscope
       scale={1.1}
+      onEnter={() => setHovering(true)}
+      onLeave={() => setHovering(false)}
     >
       <div className="p-3 shadow-lg rounded-lg bg-white">
         <Link href={encodeURIComponent(expression)}>
