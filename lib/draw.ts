@@ -3,6 +3,7 @@ import lookup from './lookup';
 // define a 16 colors palette
 // https://lospec.com/palette-list/taffy-16
 const pallet = [
+  "#1a1c2c",
   "#5d275d",
   "#b13e53",
   "#ef7d57",
@@ -18,7 +19,6 @@ const pallet = [
   "#94b0c2",
   "#566c86",
   "#333c57",
-  "#1a1c2c",
 ];
 
 

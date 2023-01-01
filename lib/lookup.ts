@@ -54,6 +54,10 @@ const lookup: Record<string, Op> = {
     fn: ([a, ...s]) => [a / 2, ...s],
     decode: ([a, ...s]) => [[a, "½"], ...s],
   },
+  "?" : {
+    fn: ([a, b, c, ...s]) => [a ? b : c, ...s],
+    decode: ([a, b, c, ...s]) => [[a, "?", b, ":", c], ...s],
+  },
 
   a: {
     fn: (s) => [10, ...s],
@@ -140,7 +144,7 @@ const lookup: Record<string, Op> = {
     decode: (s) => s,
   },
   v: {
-    fn: ([...s]) => [...s],
+    fn: ([a, ...s]) => [a * 4, ...s],
     decode: (s) => s
   },
   w: {
@@ -244,7 +248,7 @@ const lookup: Record<string, Op> = {
     decode: (s) => s,
   },
   V: {
-    fn: ([...s]) => [...s],
+    fn: ([...s], { t }) => [Math.cos(t / 256), ...s],
     decode: (s) => s
   },
   W: {
