@@ -3,32 +3,39 @@ type Expr = string | Expr[] | { fn: string, args: Expr[] };
 type Op = {
   fn: (stack: number[], data: { x: number, y: number, t: number, i: number }) => number[];
   decode: (stack: string[]) => Expr[];
+  arity?: number;
 }
 
 const lookup: Record<string, Op> = {
   "+": {
     fn: ([a, b, ...s]) => [b + a, ...s],
     decode: ([a, b, ...s]) => [[b, "+", a], ...s],
+    arity: 2,
   },
   "-": {
     fn: ([a, b, ...s]) => [b - a, ...s],
     decode: ([a, b, ...s]) => [[b, "-", a], ...s],
+    arity: 2,
   },
   "*": {
     fn: ([a, b, ...s]) => [b * a, ...s],
     decode: ([a, b, ...s]) => [[b, "*", a], ...s],
+    arity: 2,
   },
   "/": {
     fn: ([a, b, ...s]) => [b / a, ...s],
     decode: ([a, b, ...s]) => [[b, "/", a], ...s],
+    arity: 2,
   },
   "&": {
     fn: ([a, b, ...s]) => [b & a, ...s],
     decode: ([a, b, ...s]) => [[b, "&", a], ...s],
+    arity: 2,
   },
   "|": {
     fn: ([a, b, ...s]) => [b | a, ...s],
     decode: ([a, b, ...s]) => [[b, "|", a], ...s],
+    arity: 2,
   },
   "^": {
     fn: ([a, b, ...s]) => [b ^ a, ...s],
@@ -54,9 +61,14 @@ const lookup: Record<string, Op> = {
     fn: ([a, ...s]) => [a / 2, ...s],
     decode: ([a, ...s]) => [[a, "½"], ...s],
   },
-  "?" : {
+  "?": {
     fn: ([a, b, c, ...s]) => [a ? b : c, ...s],
     decode: ([a, b, c, ...s]) => [[a, "?", b, ":", c], ...s],
+  },
+
+  ".": {
+    fn: (s) => [s.slice(s.length / 2).reduce((a, n, i) => a + n * s[i], 0)],
+    decode: s => s,
   },
 
   a: {
@@ -104,12 +116,12 @@ const lookup: Record<string, Op> = {
     decode: (s) => s,
   },
   l: {
-    fn: ([...s]) => [...s],
+    fn: ([a, ...s]) => [a - 24, ...s],
     decode: (s) => s,
   },
   m: {
-    fn: ([...s]) => [...s],
-    decode: (s) => s,
+    fn: ([a, ...s], { t }) => [a + t, ...s],
+    decode: ([a, ...s]) => [[a, "+", "t"], ...s],
   },
   n: {
     fn: ([a, ...s]) => [-a, ...s],
@@ -136,7 +148,7 @@ const lookup: Record<string, Op> = {
     decode: (s) => s,
   },
   t: {
-    fn: ([...s], { t }) => [t / 256, ...s],
+    fn: ([...s], { t }) => [t, ...s],
     decode: (s) => s,
   },
   u: {
@@ -168,7 +180,7 @@ const lookup: Record<string, Op> = {
     decode: (s) => s,
   },
   B: {
-    fn: ([a, ...s]) => [...s],
+    fn: (s) => [64, ...s],
     decode: (s) => s,
   },
   C: {
@@ -208,7 +220,7 @@ const lookup: Record<string, Op> = {
     decode: (s) => s,
   },
   L: {
-    fn: ([...s]) => [...s],
+    fn: ([...s]) => [128, ...s],
     decode: (s) => s,
   },
   M: {
@@ -220,7 +232,7 @@ const lookup: Record<string, Op> = {
     decode: (s) => s
   },
   O: {
-    fn: ([...s]) => [...s],
+    fn: (s) => [s.reduce((s, v) => s + v)],
     decode: (s) => s,
   },
   P: {
@@ -248,7 +260,7 @@ const lookup: Record<string, Op> = {
     decode: (s) => s,
   },
   V: {
-    fn: ([...s], { t }) => [Math.cos(t / 256), ...s],
+    fn: ([...s], { t }) => [Math.cos(t), ...s],
     decode: (s) => s
   },
   W: {
@@ -264,7 +276,7 @@ const lookup: Record<string, Op> = {
     decode: (s) => s,
   },
   Z: {
-    fn: ([...s], { t }) => [Math.sin(t / 256), ...s],
+    fn: ([...s], { t }) => [Math.sin(t), ...s],
     decode: (s) => ["sin(t)", ...s],
   },
   0: {
