@@ -27,7 +27,7 @@ const CANVAS_SIZE = 256;
 const PIXEL_SIZE = CANVAS_SIZE / SIZE;
 const TIMESCALE = 1 / 256;
 
-function _eval(expr: string, x: number, y: number, t: number, i: number) {
+export function _eval(expr: string, x: number, y: number, t: number, i: number) {
   return [...expr].reduce((stack, token) => {
     return lookup[token]?.fn(stack, { x, y, t, i }) || stack;
   }, [] as number[]);
@@ -49,3 +49,10 @@ export function draw(context: CanvasRenderingContext2D, expr: string, t: number)
   }
 }
 
+export function getPixels(expr: string): string[][] {
+  return [...Array(SIZE)].map((_, j) => [...Array(SIZE)].map((_, i) => {
+    const [value] = _eval(expr, i, j, 1, i * SIZE + j);
+    const color = pallet[Math.floor(value) & 0xf];
+    return color;
+  }));
+}
