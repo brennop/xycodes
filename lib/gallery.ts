@@ -7,7 +7,7 @@ export default [
   "8xSxhmS-yh+%8&4+",
   "ymSx+Swy+Z+lM",
   "Xy4+/th+vSw2-",
-  "xe²X²Y²+-Q/tqSq+", // moon
+  "xe²XYH²-Q/tqSq+", // moon
   "xyZV.LXYH²-Q/", // sphere
   "xi^wCyi+tw+C+a+",
   "exhSxtw+S-yh+jM?",

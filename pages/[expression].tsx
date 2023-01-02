@@ -31,7 +31,7 @@ export default function Home() {
           maxLength={16}
           className="px-2 py-1 text-lg tracking-widest mt-2 w-full outline-none border-b-2 border-gray-900 shadow-md invalid:border-pink-500 invalid:bg-pink-100"
         />
-        <p className="text-gray-500 mt-3 max-w-xs">
+        <p className="text-gray-500 mt-3 max-w-xs cursor-default">
           {decoded && <Decoded expression={decoded} />}
         </p>
       </div>
