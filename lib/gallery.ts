@@ -12,4 +12,8 @@ export default [
   "xi^wCyi+tw+C+a+",
   "exhSxtw+S-yh+jM?",
   "xSxhmSYhO1s%j",
+  "XYHgXYKwti²SgO3&", // noisy
+  "ix-Tx*tB²/*TgM",
+  "XCAYSAthOSw2+",
+  "XYKP/tq-4%",
 ]

@@ -67,6 +67,11 @@ const lookup: Record<string, Op> = {
     decode: ([a, ...s]) => [["½", a], ...s],
     description: "a / 2",
   },
+  "!": {
+    fn: ([a, ...s]) => [Number(!a), ...s],
+    decode: ([a, ...s]) => [["!", a], ...s],
+    description: "!a",
+  },
   "?": {
     fn: ([a, b, c, ...s]) => [a ? b : c, ...s],
     decode: ([a, b, c, ...s]) => [["?", c, b, a], ...s],
@@ -110,9 +115,9 @@ const lookup: Record<string, Op> = {
     description: "15",
   },
   g: {
-    fn: ([...s]) => [...s],
-    decode: ([...s]) => [["g", ...s]],
-    description: "not implemented",
+    fn: ([a, ...s]) => [a / 8, ...s],
+    decode: ([a, ...s]) => [["g", a], ...s],
+    description: "a / 8",
   },
   h: {
     fn: ([a, ...s]) => [a / 2, ...s],
@@ -171,7 +176,7 @@ const lookup: Record<string, Op> = {
   },
   s: {
     fn: ([a, b, ...s]) => [b, a, ...s],
-    decode: ([a, b, ...s]) => [["s", a, b], ...s],
+    decode: ([a, b, ...s]) => [["s", b, a], ...s],
     description: "swap",
   },
   t: {
