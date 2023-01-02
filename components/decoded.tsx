@@ -9,14 +9,14 @@ import { useState } from "react";
 import lookup from "../lib/lookup";
 
 const pallet = [
-  ["text-red-600", "peer-hover:bg-pink-100"],
-  ["text-orange-600", "peer-hover:bg-red-100"],
-  ["text-yellow-600", "peer-hover:bg-orange-100"],
-  ["text-green-600", "peer-hover:bg-yellow-100"],
-  ["text-blue-600", "peer-hover:bg-green-100"],
-  ["text-indigo-600", "peer-hover:bg-blue-100"],
-  ["text-purple-600", "peer-hover:bg-indigo-100"],
-  ["text-pink-600", "peer-hover:bg-purple-100"],
+  ["text-red-600", "peer-hover:bg-pink-200"],
+  ["text-orange-600", "peer-hover:bg-red-200"],
+  ["text-yellow-600", "peer-hover:bg-orange-200"],
+  ["text-green-600", "peer-hover:bg-amber-200"],
+  ["text-blue-600", "peer-hover:bg-green-200"],
+  ["text-indigo-600", "peer-hover:bg-blue-200"],
+  ["text-purple-600", "peer-hover:bg-indigo-200"],
+  ["text-pink-600", "peer-hover:bg-purple-200"],
 ];
 
 type Expr = string | Expr[];
@@ -52,10 +52,10 @@ export default function Decoded({
       <span
         className={
           pallet[depth % pallet.length].join(" ") +
-          " flex mr-2 flex-row-reverse"
+          " flex mx-0.5 flex-row-reverse"
         }
       >
-        <span ref={reference} {...getReferenceProps()} className="peer">
+        <span ref={reference} {...getReferenceProps()} className="peer mx-0.5">
           {op}
         </span>
         {args.reverse().map((expr, i) => (
@@ -63,7 +63,8 @@ export default function Decoded({
         ))}
       </span>
       {open && (
-        <div
+        <span
+          className={pallet[depth % pallet.length].join(" ")}
           ref={floating}
           {...getFloatingProps()}
           style={{
@@ -74,7 +75,7 @@ export default function Decoded({
           }}
         >
           {description}
-        </div>
+        </span>
       )}
     </>
   );
