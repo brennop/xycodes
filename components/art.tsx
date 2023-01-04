@@ -40,6 +40,19 @@ export default function Art({ expression = "xy+", dynamic = true }) {
     >
       <div className="p-3 shadow-lg rounded-lg bg-white">
         <Link href={encodeURIComponent(expression)}>
+          <div className="relative mix-blend-hard-light contrast-50 opacity-25">
+            <svg viewBox="0 0 200 200" xmlns='http://www.w3.org/2000/svg' className="absolute">
+              <filter id='noiseFilter'>
+                <feTurbulence
+                  type='fractalNoise'
+                  baseFrequency='0.9'
+                  numOctaves='3'
+                  stitchTiles='stitch' />
+              </filter>
+
+              <rect width='100%' height='100%' filter='url(#noiseFilter)' />
+            </svg>
+          </div>
           <canvas ref={canvas} width={256} height={256} className="w-64" />
         </Link>
       </div>
