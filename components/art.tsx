@@ -24,14 +24,15 @@ export default function Art({ expression = "xy+", dynamic = true }) {
         frag: `
       precision mediump float;
       #define PI 3.1415926538
+      #define SIZE 16.0
       varying vec2 uv;
       uniform sampler2D palette; // 16 colors
       uniform float time;
       void main () {
-        float x = uv.x * 16.;
-        float y = -uv.y * 16.;
-        float t = time;
-        float i = x * 16. + y;
+        float x = floor(uv.x * SIZE);
+        float y = floor(-uv.y * SIZE);
+        float t = time * 4.;
+        float i = x * SIZE * 2. + y;
         gl_FragColor = texture2D(palette, vec2(mod(${transpile(expression)} / 16., 1.0), 0.0));
       }
     `,

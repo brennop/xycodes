@@ -2,18 +2,18 @@ export default [
   "XYHtSt-+3%8+",
   "XYHtStO3%j",
   "yhiwtOCb+",
-  "xq4-yq4-*t+S3*",
+  "xqyq*tw+4%",
   "oXYH/XYKoP/*tO",
-  "8xSxhmS-yh+%8&4+",
-  "ymSx+Swy+Z+lM",
-  "Xy4+/th+vSw2-",
-  "xe²XYH²-Q/tqSq+", // moon
-  "xyZV.LXYH²-Q/3&j", // sphere
+  "1xSxhtw+S-yh+%Mj",
+  "ymSx+Swy+Z+jM", // flames
+  "xynl/th+vSw2-",
+  "xe²xyH²-Q/tS+", // moon
+  "xyZV.LxyH²-Q+M", // the eye
   "xi^wCyi+tw+C+a+",
-  "exhSxtw+S-yh+jM?",
   "xSxhmSYhO1s%j",
-  "XYHgXYKwti²SgO3&", // noisy
-  "ix-Tx*tB²/*TgM",
+  "XYHgXYKwti²SgO", // noisy
+  "XYHgXYKL/tiSgO",
+  "iX-TX*tB²/*TgM",
   "XCAYSAthOSw2+",
-  "XYKP/tq-4%",
+  "XYKP/tq-2%4-", // clock
 ]

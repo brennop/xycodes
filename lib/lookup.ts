@@ -132,6 +132,7 @@ const lookup: Record<string, Op> = {
   g: {
     fn: ([a, ...s]) => [a / 8, ...s],
     decode: ([a, ...s]) => [["g", a], ...s],
+    compile: ([a, ...s]) => [`(${a}/8.)`, ...s],
     description: "a / 8",
   },
   h: {
@@ -172,6 +173,7 @@ const lookup: Record<string, Op> = {
   n: {
     fn: ([a, ...s]) => [-a, ...s],
     decode: ([a, ...s]) => [["n", a], ...s],
+    compile: ([a, ...s]) => [`(-${a})`, ...s],
     description: "-a",
   },
   o: {
@@ -244,11 +246,13 @@ const lookup: Record<string, Op> = {
   A: {
     fn: ([a, ...s]) => [Math.abs(a), ...s],
     decode: ([a, ...s]) => [["A", a], ...s],
+    compile: ([a, ...s]) => [`abs(${a})`, ...s],
     description: "abs(a)",
   },
   B: {
     fn: (s) => [64, ...s],
     decode: (s) => [["B"], ...s],
+    compile: (s) => ["32.", ...s],
     description: "64 (big)",
   },
   C: {
@@ -286,11 +290,13 @@ const lookup: Record<string, Op> = {
   I: {
     fn: ([a, ...s]) => [1 / a, ...s],
     decode: ([a, ...s]) => [["I", a], ...s],
+    compile: ([a, ...s]) => [`(1./${a})`, ...s],
     description: "1 / a",
   },
   J: {
     fn: ([a, ...s]) => [1 + a, ...s],
     decode: ([a, ...s]) => [["J", a], ...s],
+    compile: ([a, ...s]) => [`(1.+${a})`, ...s],
     description: "1 + a",
   },
   K: {
@@ -325,7 +331,7 @@ const lookup: Record<string, Op> = {
   P: {
     fn: ([...s]) => [Math.PI * 2, ...s],
     decode: (s) => [["P"], ...s],
-    compile: (s) => ["PI * 2.", ...s],
+    compile: (s) => ["(PI * 2.)", ...s],
     description: "2 * PI",
   },
   Q: {
@@ -348,6 +354,7 @@ const lookup: Record<string, Op> = {
   T: {
     fn: ([a, ...s]) => [Math.tan(a), ...s],
     decode: ([a, ...s]) => [["T", a], ...s],
+    compile: ([a, ...s]) => [`tan(${a})`, ...s],
     description: "tan(a)",
   },
   U: {
