@@ -167,7 +167,7 @@ const lookup: Record<string, Op> = {
   m: {
     fn: ([a, ...s], { t }) => [a + t, ...s],
     decode: ([a, ...s]) => [["m", a], ...s],
-    compile: ([a, ...s]) => [`(t + ${a})`, ...s],
+    compile: ([a, ...s]) => [`(${a} + t)`, ...s],
     description: "a + t",
   },
   n: {
@@ -274,6 +274,7 @@ const lookup: Record<string, Op> = {
   F: {
     fn: ([a, ...s]) => [Math.floor(a), ...s],
     decode: ([a, ...s]) => [["F", a], ...s],
+    compile: ([a, ...s]) => [`floor(${a})`, ...s],
     description: "floor(a)",
   },
   G: {

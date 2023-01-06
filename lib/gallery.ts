@@ -1,5 +1,5 @@
 export default [
-  "XYHtSt-+3%8+",
+  "XYHtSt-+3%5+",
   "XYHtStO3%j",
   "yhiwtOCb+",
   "xqyq*tw+4%",
@@ -7,7 +7,7 @@ export default [
   "1xSxhtw+S-yh+%Mj",
   "ymSx+Swy+Z+jM", // flames
   "xynl/th+vSw2-",
-  "xe²xyH²-Q/tS+", // moon
+  "xe²xyH²-Q/t+Swa+", // moon
   "xyZV.LxyH²-Q+M", // the eye
   "xi^wCyi+tw+C+a+",
   "xSxhmSYhO1s%j",

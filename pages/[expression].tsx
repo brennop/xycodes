@@ -6,6 +6,7 @@ import Art from "../components/art";
 import gallery from "../lib/gallery";
 import { decode } from "../lib/decode"
 import Decoded from '../components/decoded';
+import { transpile } from '../lib/draw';
 
 const websiteUrl = "https://xycodes.vercel.app";
 
