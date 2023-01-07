@@ -77,6 +77,23 @@ const lookup: Record<string, Op> = {
     decode: ([a, b, c, ...s]) => [["?", c, b, a], ...s],
     description: "a ? b : c",
   },
+  "<": {
+    fn: ([a, b, ...s]) => [Number(b < a), ...s],
+    decode: ([a, b, ...s]) => [["<", b, a], ...s],
+    description: "b < a",
+  },
+  "$": { // cubic Hermit interpolation
+    fn: ([b, a, ...s]) => {
+      const lowerBound = 0x0;
+      const upperBound = b;
+      if (a < lowerBound) return [lowerBound, ...s];
+      if (a > upperBound) return [upperBound, ...s];
+      const x = (a - lowerBound) / (upperBound - lowerBound);
+      return [x * x * (3 - 2 * x), ...s];
+    },
+    decode: ([a, b, ...s]) => [["$", b, a], ...s],
+    description: "smoothstep(a, 0, 16)",
+  },
 
   ".": {
     fn: (s) => [s.slice(s.length / 2).reduce((a, n, i) => a + n * s[i], 0)],
@@ -176,7 +193,7 @@ const lookup: Record<string, Op> = {
   },
   s: {
     fn: ([a, b, ...s]) => [b, a, ...s],
-    decode: ([a, b, ...s]) => [["s", b, a], ...s],
+    decode: ([a, b, ...s]) => [b, a, ...s],
     description: "swap",
   },
   t: {
@@ -185,9 +202,9 @@ const lookup: Record<string, Op> = {
     description: "t (time)",
   },
   u: {
-    fn: ([...s]) => [...s],
-    decode: ([...s]) => [["u", ...s]],
-    description: "not implemented",
+    fn: ([a, ...s]) => [a - 1, ...s],
+    decode: ([a, ...s]) => [["u", a], ...s],
+    description: "a  - 1",
   },
   v: {
     fn: ([a, ...s]) => [a * 4, ...s],
@@ -231,7 +248,7 @@ const lookup: Record<string, Op> = {
   },
   D: {
     fn: ([a, ...s]) => [a, a, ...s],
-    decode: ([a, ...s]) => [["D", a], ...s],
+    decode: ([a, ...s]) => [a, a, ...s],
     description: "[a] -> [a a]",
   },
   E: {

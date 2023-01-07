@@ -16,4 +16,8 @@ export default [
   "ix-Tx*tB²/*TgM",
   "XCAYSAthOSw2+",
   "XYKP/tq-4%",
+  "XwAjMYwAjMHf$v",   // squircle
+  "xymCVOyxSZ++HSwu", // waves
+  "XgyStOYgxSm+HSv",
+  "xDCm+yDSm+H3&j",
 ]
