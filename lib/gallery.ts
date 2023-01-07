@@ -6,9 +6,12 @@ export default [
   "oXYH/XYKoP/*tO",
   "8xSxhmS-yh+%8&4+",
   "ymSx+Swy+Z+lM",
+  "ymSxZOSyg+",
+  "ygmxqzyg+",
   "Xy4+/th+vSw2-",
   "xe²XYH²-Q/tqSq+", // moon
   "xyZV.LXYH²-Q/3&j", // sphere
+  "XYZV.LXYH²-Q+M",   // "the eye"
   "xi^wCyi+tw+C+a+",
   "exhSxtw+S-yh+jM?",
   "xSxhmSYhO1s%j",

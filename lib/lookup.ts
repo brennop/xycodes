@@ -1,3 +1,7 @@
+import { createNoise2D } from "simplex-noise"
+
+const noise = createNoise2D();
+
 export type Expr = string | [string, ...Expr[]]
 
 type Op = {
@@ -7,7 +11,7 @@ type Op = {
 }
 
 const lookup: Record<string, Op> = {
- "+": {
+  "+": {
     fn: ([a, b, ...s]) => [b + a, ...s],
     decode: ([a, b, ...s]) => [["+", b, a], ...s],
     description: "a + b"
@@ -227,9 +231,9 @@ const lookup: Record<string, Op> = {
     description: "y (y position)",
   },
   z: {
-    fn: ([...s]) => [...s],
-    decode: ([...s]) => [["z", ...s]],
-    description: "not implemented",
+    fn: ([a, b, ...s]) => [noise(a, b), ...s],
+    decode: ([a, b, ...s]) => [["z", b, a], ...s],
+    description: "noise(a, b)",
   },
   A: {
     fn: ([a, ...s]) => [Math.abs(a), ...s],
@@ -387,7 +391,7 @@ const lookup: Record<string, Op> = {
     description: "4",
   },
   5: {
-        fn: (s) => [5, ...s],
+    fn: (s) => [5, ...s],
     decode: (s) => [["5"], ...s],
     description: "5",
   },
