@@ -23,4 +23,5 @@ export default [
   "xymCVOyxSZ++HSwu", // waves
   "XgyStOYgxSm+HSv",
   "xDCm+yDSm+H3&j",
+  "ygFmxhFzyg+3-M",   // music waves
 ]
