@@ -7,7 +7,7 @@ export default [
   "8xSxhmS-yh+%8&4+",
   "ymSx+Swy+Z+lM",
   "ymSxZOSyg+",
-  "ygmxqzyg+",
+  "ygmxqzyg+M", // flames
   "Xy4+/th+vSw2-",
   "xe²XYH²-Q/tqSq+", // moon
   "xyZV.LXYH²-Q/3&j", // sphere
@@ -25,5 +25,6 @@ export default [
   "xDCm+yDSm+H3&j",
   "tgxo/yo/zwv2-M",
   "ygFmxhFzyg+3-M",   // music waves
-  "xy-ygt-to/FzvuMj" // rain
+  "xy-ygt-to/FzvuMj", // rain
+  "X²XAY2-+²+B-QMh",
 ]
