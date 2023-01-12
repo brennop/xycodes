@@ -39,7 +39,7 @@ export default function Art({ expression = "xy+", dynamic = true }) {
       onLeave={() => setHovering(false)}
     >
       <div className="p-3 shadow-lg rounded-lg bg-white">
-        <Link href={encodeURIComponent(expression)}>
+        <Link href={encodeURIComponent(expression)} className="hover:cursor-none">
           <canvas ref={canvas} width={256} height={256} className="w-64" />
         </Link>
       </div>
