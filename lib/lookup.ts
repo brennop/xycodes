@@ -1,6 +1,6 @@
-import { createNoise2D } from "simplex-noise"
+import { createNoise3D } from "simplex-noise"
 
-const noise = createNoise2D();
+const noise = createNoise3D();
 
 export type Expr = string | [string, ...Expr[]]
 
@@ -231,8 +231,8 @@ const lookup: Record<string, Op> = {
     description: "y (y position)",
   },
   z: {
-    fn: ([a, b, ...s]) => [noise(a, b), ...s],
-    decode: ([a, b, ...s]) => [["z", b, a], ...s],
+    fn: ([a, b, c, ...s]) => [noise(c || 0, b || 0, a), ...s],
+    decode: ([a, b, c, ...s]) => [["z", c, b, a], ...s],
     description: "noise(a, b)",
   },
   A: {
