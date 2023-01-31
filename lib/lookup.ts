@@ -86,6 +86,11 @@ const lookup: Record<string, Op> = {
     decode: ([a, b, ...s]) => [["<", b, a], ...s],
     description: "b < a",
   },
+  "=": {
+    fn: ([a, b, ...s]) => [Number(Math.abs(a-b) < 0.1), ...s],
+    decode: ([a, b, ...s]) => [["=", b, a], ...s],
+    description: "b = a",
+  },
   "$": { // cubic Hermit interpolation
     fn: ([b, a, ...s]) => {
       const lowerBound = 0x0;
