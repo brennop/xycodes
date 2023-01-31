@@ -27,5 +27,6 @@ export default [
   "ygFmxhFzyg+3-M",   // music waves
   "xy-ygt-to/FzvuMj", // rain
   "X²XAY2-+²+B-QMh",
-  "ygFtqxqFzyg+2-"
+  "ygFtqxqFzyg+2-",
+  "XXAY2-+HZ+a$2+", // pulsing heart
 ]

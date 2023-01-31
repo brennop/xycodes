@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Tilt from 'react-parallax-tilt';
 
 import { draw } from "../lib/draw";
+import { record, download } from "../lib/download"
 
 export default function Art({ expression = "xy+", dynamic = true }) {
   const canvas = useRef<HTMLCanvasElement>(null);
@@ -29,20 +30,30 @@ export default function Art({ expression = "xy+", dynamic = true }) {
     return () => cancelAnimationFrame(frameId);
   }, [expression, dynamic, hovering]);
 
+  const handleDownload = async () => {
+    const blob = await record(canvas.current!, 5000);
+    download(blob, "art");
+  };
+
   return (
-    <Tilt
-      glareEnable
-      glarePosition="all"
-      gyroscope
-      scale={1.1}
-      onEnter={() => setHovering(true)}
-      onLeave={() => setHovering(false)}
-    >
-      <div className="p-3 shadow-lg rounded-lg bg-white">
-        <Link href={encodeURIComponent(expression)} className="hover:cursor-none">
-          <canvas ref={canvas} width={256} height={256} className="w-64" />
-        </Link>
-      </div>
-    </Tilt>
+    <div>
+      <Tilt
+        glareEnable
+        glarePosition="all"
+        gyroscope
+        scale={1.1}
+        onEnter={() => setHovering(true)}
+        onLeave={() => setHovering(false)}
+      >
+        <div className="p-3 shadow-lg rounded-lg bg-white">
+          <Link href={encodeURIComponent(expression)} className="hover:cursor-none">
+            <canvas ref={canvas} width={256} height={256} className="w-64" />
+          </Link>
+        </div>
+      </Tilt>
+      <button onClick={handleDownload}>download</button>
+    </div>
   );
 }
+
+
