@@ -5,6 +5,13 @@ import createREGL from 'regl';
 
 import { palette, transpile } from "../lib/draw";
 
+const bayerMatrix = [
+  [0, 8, 2, 10],
+  [12, 4, 14, 6],
+  [3, 11, 1, 9],
+  [15, 7, 13, 5],
+];
+
 export default function Art({ expression = "xy+", dynamic = true }) {
   const canvas = useRef<HTMLCanvasElement>(null);
   const regl = useRef<ReturnType<typeof createREGL>>();
@@ -27,13 +34,18 @@ export default function Art({ expression = "xy+", dynamic = true }) {
       #define SIZE 16.0
       varying vec2 uv;
       uniform sampler2D palette; // 16 colors
+      uniform sampler2D bayer; // 4x4 bayer matrix
       uniform float time;
+      
       void main () {
         float x = floor(uv.x * SIZE);
         float y = floor(-uv.y * SIZE);
         float t = time * 4.;
         float i = x * SIZE * 2. + y;
-        gl_FragColor = texture2D(palette, vec2(mod(${transpile(expression)} / 16., 1.0), 0.0));
+        float bayerValue = texture2D(bayer, vec2(mod(uv.x * 256., 4.) / 2., mod(uv.y * 256., 4.) / 2.)).r;
+        // float value = ${transpile(expression)};
+        float value = mod(${transpile(expression)} / 16. + bayerValue, 1.0);
+        gl_FragColor = texture2D(palette, vec2(value, 0.0));
       }
     `,
         vert: `
@@ -51,6 +63,7 @@ export default function Art({ expression = "xy+", dynamic = true }) {
         uniforms: {
           time: regl.current.context("time"),
           palette: regl.current.texture([palette]),
+          bayer: regl.current.texture(bayerMatrix),
         },
         count: 3,
       });
