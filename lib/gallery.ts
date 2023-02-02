@@ -20,10 +20,11 @@ export default [
   "XCAYSAthOSw2+",
   "XYKP/tq-4%",
   "XwAjMYwAjMHf$v",   // squircle
-  "xymCVOyxSZ++HSwu", // waves
+  "XyC+YxS+Ht+Su", // waves
   "XgyStOYgxSm+HSv",
   "xDCm+yDSm+H3&j",
   "tgxo/yo/zwv2-M",
+  "tgxo/yo/zvAu",
   "ygFmxhFzyg+3-M",   // music waves
   "xy-ygt-to/FzvuMj", // rain
   "X²XAY2-+²+B-QMh",
