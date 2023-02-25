@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Tilt from 'react-parallax-tilt';
 
 import { draw } from "../lib/draw";
+import compile from "../lib/compile";
 
 export default function Art({ expression = "xy+", dynamic = true }) {
   const canvas = useRef<HTMLCanvasElement>(null);
@@ -16,8 +17,10 @@ export default function Art({ expression = "xy+", dynamic = true }) {
     let frameId: number;
     const ctx = canvas.current?.getContext("2d");
 
+    const _eval = compile(expression);
+
     function render(time: number) {
-      if (ctx) draw(ctx, expression, time);
+      if (ctx) draw(ctx, _eval, time);
 
       if (!dynamic && !hovering) return;
 

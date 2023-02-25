@@ -33,10 +33,10 @@ export function _eval(expr: string, x: number, y: number, t: number, i: number) 
   }, [] as number[]);
 }
 
-export function draw(context: CanvasRenderingContext2D, expr: string, t: number) {
+export function draw(context: CanvasRenderingContext2D, _eval: Function, t: number) {
   for (let i = 0; i < SIZE; i++) {
     for (let j = 0; j < SIZE; j++) {
-      const [value] = _eval(expr, i, j, t * TIMESCALE, i * SIZE + j);
+      const value = _eval(i, j, t * TIMESCALE);
       const color = pallet[Math.floor(value) & 0xf];
       context.fillStyle = color;
       context.fillRect(
