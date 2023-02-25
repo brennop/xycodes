@@ -42,9 +42,9 @@ export default function Art({ expression = "xy+", dynamic = true }) {
         float y = floor(-uv.y * SIZE);
         float t = time * 4.;
         float i = x * SIZE * 2. + y;
-        float bayerValue = texture2D(bayer, vec2(mod(uv.x * 256., 4.) / 2., mod(uv.y * 256., 4.) / 2.)).r;
-        // float value = ${transpile(expression)};
-        float value = mod(${transpile(expression)} / 16. + bayerValue, 1.0);
+        // float bayerValue = texture2D(bayer, vec2(mod(uv.x * 128., 4.) * .25, mod(uv.y * 128., 4.) * .25)).r;
+        // float value = mod(${transpile(expression)} / 16. + bayerValue, 1.0);
+        float value = mod(${transpile(expression)} / 16., 1.0);
         gl_FragColor = texture2D(palette, vec2(value, 0.0));
       }
     `,
