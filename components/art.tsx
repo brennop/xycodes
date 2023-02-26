@@ -17,19 +17,22 @@ export default function Art({ expression = "xy+", dynamic = true }) {
     let frameId: number;
     const ctx = canvas.current?.getContext("2d");
 
-    const _eval = compile(expression);
+    try {
+      const _eval = compile(expression);
 
-    function render(time: number) {
-      if (ctx) draw(ctx, _eval, time);
+      function render(time: number) {
+        if (ctx) draw(ctx, _eval, time);
 
-      if (!dynamic && !hovering) return;
+        if (!dynamic && !hovering) return;
+
+        frameId = requestAnimationFrame(render);
+      }
 
       frameId = requestAnimationFrame(render);
+
+      return () => cancelAnimationFrame(frameId);
+    } catch (e) {
     }
-
-    frameId = requestAnimationFrame(render);
-
-    return () => cancelAnimationFrame(frameId);
   }, [expression, dynamic, hovering]);
 
   return (

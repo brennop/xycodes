@@ -1,4 +1,7 @@
 import lookup from './lookup';
+import { createNoise3D } from "simplex-noise"
+
+const noise = createNoise3D();
 
 // define a 16 colors palette
 // https://lospec.com/palette-list/taffy-16
@@ -36,7 +39,7 @@ export function _eval(expr: string, x: number, y: number, t: number, i: number) 
 export function draw(context: CanvasRenderingContext2D, _eval: Function, t: number) {
   for (let i = 0; i < SIZE; i++) {
     for (let j = 0; j < SIZE; j++) {
-      const value = _eval(i, j, t * TIMESCALE);
+      const value = _eval(i, j, t * TIMESCALE, i * SIZE + j, noise);
       const color = pallet[Math.floor(value) & 0xf];
       context.fillStyle = color;
       context.fillRect(

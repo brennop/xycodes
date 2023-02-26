@@ -50,14 +50,11 @@ export default function Home({ expression: initial }: { expression: string }) {
         <p>
           {getString(expression)}
         </p>
-        <div className="text-gray-500 mt-3 max-w-xs cursor-default">
-          {decoded && <Decoded expression={decoded} />}
-        </div>
       </div>
     </div>
     <div className="bg-gray-100">
       <div className="grid grid-cols-[repeat(auto-fit,minmax(256px,1fr))] justify-items-center gap-4 p-4">
-        {gallery.slice(0,0).map((expression) => <Art expression={expression} key={expression} dynamic={false} />)}
+        {gallery.map((expression) => <Art expression={expression} key={expression} dynamic={false} />)}
       </div>
     </div>
   </div>
