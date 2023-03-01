@@ -4,8 +4,7 @@ export default [
   "yhiwtRCb.",
   "xq4-yq4-*t.S3*",
   "gXYH_XYKgP_*tR",
-  "8xSxhmS-yh.~8j4.",
-  "ymSx.Swy.U.lM",
+  "ymSx.Swy.U.lcw-M",
   "ymSxURSyr.",
   "yrmxqzyr.M", // flames
   "Xy4._th.vSw2-",
@@ -13,7 +12,8 @@ export default [
   "xyUVDLXYHW-Q_3j", // sphere
   "XYUVDLXYHW-Q.M",   // "the eye"
   "1xSxhmSYh..~",
-  "xSxhmSYhR1s~",
+  "xhSxtw.S-yh.M8;",
+  "8xSxhmS-yh.~8j4.",
   "XYHrXYKwtxSrR3j", // noisy
   "iX-Tx*tL_*TrM",
   "XCAYSAthRSw2.",
