@@ -5,8 +5,8 @@ import { GetServerSideProps } from 'next'
 import Art from "../components/art";
 import gallery from "../lib/gallery";
 import { decode } from "../lib/decode"
-import { getString } from "../lib/compile"
 import Decoded from '../components/decoded';
+import { decode as decodeString } from '../lib/translate';
 
 const websiteUrl = "https://xycodes.vercel.app";
 
@@ -24,7 +24,7 @@ export default function Home({ expression: initial }: { expression: string }) {
   const [expression, setExpression] = useState<string>(initial as string || "xy+")
 
   useEffect(() => {
-    setExpression(initial as string)
+    setExpression(decodeString(initial as string))
   }, [initial])
 
   const decoded = useMemo(() => {
@@ -47,9 +47,6 @@ export default function Home({ expression: initial }: { expression: string }) {
           maxLength={16}
           className="px-2 py-1 text-lg tracking-widest mt-2 w-full outline-none border-b-2 border-gray-900 shadow-md invalid:border-pink-500 invalid:bg-pink-100"
         />
-        <p>
-          {getString(expression)}
-        </p>
       </div>
     </div>
     <div className="bg-gray-100">
