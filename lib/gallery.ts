@@ -12,6 +12,8 @@ export default [
   "xe²XYH²-Q/tqSq+", // moon
   "xyZV.LXYH²-Q/3&j", // sphere
   "XYZV.LXYH²-Q+M",   // "the eye"
+  "XYVZLXYHW-Q.M",
+  "XxVZLXYHW-Q.M7/",
   "xi^wCyi+tw+C+a+",
   "exhSxtw+S-yh+jM?",
   "xSxhmSYhO1s%j",
