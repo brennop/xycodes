@@ -6,10 +6,14 @@ import createREGL from 'regl';
 import { palette, transpile } from "../lib/draw";
 
 const bayerMatrix = [
-  [0, 8, 2, 10],
-  [12, 4, 14, 6],
-  [3, 11, 1, 9],
-  [15, 7, 13, 5],
+  [0, 32, 8, 40, 2, 34, 10, 42],
+  [48, 16, 56, 24, 50, 18, 58, 26],
+  [12, 44, 4, 36, 14, 46, 6, 38],
+  [60, 28, 52, 20, 62, 30, 54, 22],
+  [3, 35, 11, 43, 1, 33, 9, 41],
+  [51, 19, 59, 27, 49, 17, 57, 25],
+  [15, 47, 7, 39, 13, 45, 5, 37],
+  [63, 31, 55, 23, 61, 29, 53, 21],
 ];
 
 export default function Art({ expression = "xy+", dynamic = true }) {
@@ -32,19 +36,24 @@ export default function Art({ expression = "xy+", dynamic = true }) {
       precision mediump float;
       #define PI 3.1415926538
       #define SIZE 16.0
+      #define BAYER_SIZE 8.0
       varying vec2 uv;
       uniform sampler2D palette; // 16 colors
-      uniform sampler2D bayer; // 4x4 bayer matrix
+      uniform sampler2D bayer; // 8x8 bayer matrix
       uniform float time;
       
       void main () {
         float x = floor(uv.x * SIZE);
         float y = floor(-uv.y * SIZE);
-        float t = time * 4.;
+        float t = time * 3.;
         float i = x * SIZE * 2. + y;
-        // float bayerValue = texture2D(bayer, vec2(mod(uv.x * 128., 4.) * .25, mod(uv.y * 128., 4.) * .25)).r;
-        // float value = mod(${transpile(expression)} / 16. + bayerValue, 1.0);
-        float value = mod(${transpile(expression)} / 16., 1.0);
+
+        float bayerValue = texture2D(bayer, vec2(
+          mod(uv.x * 128., BAYER_SIZE) / BAYER_SIZE,
+          mod(uv.y * 128., BAYER_SIZE) / BAYER_SIZE
+        )).r / 4.;
+
+        float value = mod(${transpile(expression)} / 16. + bayerValue, 1.0);
         gl_FragColor = texture2D(palette, vec2(value, 0.0));
       }
     `,
@@ -58,14 +67,23 @@ export default function Art({ expression = "xy+", dynamic = true }) {
       }
     `,
         attributes: {
-          position: [-4, -4, 4, -4, 0, 4],
+          // quad vertex positions
+          // we pass two triangles to draw a quad
+          position: [
+            [-1, -1],
+            [1, -1],
+            [1, 1],
+            [-1, -1],
+            [1, 1],
+            [-1, 1],
+          ],
         },
         uniforms: {
           time: regl.current.context("time"),
           palette: regl.current.texture([palette]),
           bayer: regl.current.texture(bayerMatrix),
         },
-        count: 3,
+        count: 6,
       });
 
       const frame = regl.current.frame(() => {
@@ -87,19 +105,10 @@ export default function Art({ expression = "xy+", dynamic = true }) {
   }, [expression, dynamic, hovering, regl]);
 
   return (
-    <Tilt
-      glareEnable
-      glarePosition="all"
-      gyroscope
-      scale={1.1}
-      onEnter={() => setHovering(true)}
-      onLeave={() => setHovering(false)}
-    >
-      <div className="p-3 shadow-lg rounded-lg bg-white">
-        <Link href={encodeURIComponent(expression)}>
-          <canvas ref={canvas} width={256} height={256} className="w-64" />
-        </Link>
-      </div>
-    </Tilt>
+    <div className="p-3 shadow-lg bg-white">
+      <Link href={encodeURIComponent(expression)}>
+        <canvas ref={canvas} width={768} height={768} className="" />
+      </Link>
+    </div>
   );
 }
