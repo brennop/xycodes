@@ -212,7 +212,8 @@ const lookup: Record<string, Op> = {
   u: {
     fn: ([...s]) => [...s],
     decode: ([...s]) => [["u", ...s]],
-    description: "not implemented",
+    description: "a - 1",
+    compile: ([a, ...s]) => [`(${a}-1.)`, ...s],
   },
   v: {
     fn: ([a, ...s]) => [a * 4, ...s],
@@ -374,6 +375,7 @@ const lookup: Record<string, Op> = {
     fn: ([a, ...s]) => [a * a, ...s],
     decode: ([a, ...s]) => [["W", a], ...s],
     description: "a * a",
+    compile: ([a, ...s]) => [`(${a} * ${a})`, ...s],
   },
   X: {
     fn: ([...s], { x }) => [x - 16, ...s],

@@ -1,9 +1,9 @@
 import { useRef, useEffect, useState } from "react";
 import Link from 'next/link';
-import Tilt from 'react-parallax-tilt';
 import createREGL from 'regl';
 
 import { palette, transpile } from "../lib/draw";
+import { download, record } from "../lib/download";
 
 const bayerMatrix = [
   [0, 32, 8, 40, 2, 34, 10, 42],
@@ -19,8 +19,6 @@ const bayerMatrix = [
 export default function Art({ expression = "xy+", dynamic = true }) {
   const canvas = useRef<HTMLCanvasElement>(null);
   const regl = useRef<ReturnType<typeof createREGL>>();
-
-  const [hovering, setHovering] = useState(false);
 
   useEffect(() => {
     if (!canvas.current) return;
@@ -45,7 +43,7 @@ export default function Art({ expression = "xy+", dynamic = true }) {
       void main () {
         float x = floor(uv.x * SIZE);
         float y = floor(-uv.y * SIZE);
-        float t = time * 3.;
+        float t = time * 2.;
         float i = x * SIZE * 2. + y;
 
         float bayerValue = texture2D(bayer, vec2(
@@ -87,7 +85,7 @@ export default function Art({ expression = "xy+", dynamic = true }) {
       });
 
       const frame = regl.current.frame(() => {
-        if (!dynamic && !hovering) return;
+        if (!dynamic) return;
         regl.current!.clear({
           color: [0, 0, 0, 1],
           depth: 1,
@@ -102,13 +100,21 @@ export default function Art({ expression = "xy+", dynamic = true }) {
     catch (e) {
       console.error(e)
     }
-  }, [expression, dynamic, hovering, regl]);
+  }, [expression, dynamic, regl]);
+
+  const handleDownload = async () => {
+    const blob = await record(canvas.current!, 6000);
+    download(blob, "art");
+  };
 
   return (
-    <div className="p-3 shadow-lg bg-white">
-      <Link href={encodeURIComponent(expression)}>
-        <canvas ref={canvas} width={768} height={768} className="" />
-      </Link>
-    </div>
+    <>
+      <div className="p-3 shadow-lg bg-white">
+        <Link href={encodeURIComponent(expression)}>
+          <canvas ref={canvas} width={768} height={768} className="" />
+        </Link>
+      </div>
+      <button onClick={handleDownload} className="">download</button>
+    </>
   );
 }
