@@ -5,15 +5,22 @@ import createREGL from 'regl';
 import { palette, transpile } from "../lib/draw";
 import { download, record } from "../lib/download";
 
+// const bayerMatrix = [
+//   [0, 32, 8, 40, 2, 34, 10, 42],
+//   [48, 16, 56, 24, 50, 18, 58, 26],
+//   [12, 44, 4, 36, 14, 46, 6, 38],
+//   [60, 28, 52, 20, 62, 30, 54, 22],
+//   [3, 35, 11, 43, 1, 33, 9, 41],
+//   [51, 19, 59, 27, 49, 17, 57, 25],
+//   [15, 47, 7, 39, 13, 45, 5, 37],
+//   [63, 31, 55, 23, 61, 29, 53, 21],
+// ];
+
 const bayerMatrix = [
-  [0, 32, 8, 40, 2, 34, 10, 42],
-  [48, 16, 56, 24, 50, 18, 58, 26],
-  [12, 44, 4, 36, 14, 46, 6, 38],
-  [60, 28, 52, 20, 62, 30, 54, 22],
-  [3, 35, 11, 43, 1, 33, 9, 41],
-  [51, 19, 59, 27, 49, 17, 57, 25],
-  [15, 47, 7, 39, 13, 45, 5, 37],
-  [63, 31, 55, 23, 61, 29, 53, 21],
+  [0, 8, 2, 10],
+  [12, 4, 14, 6],
+  [3, 11, 1, 9],
+  [15, 7, 13, 5],
 ];
 
 export default function Art({ expression = "xy+", dynamic = true }) {
@@ -34,7 +41,7 @@ export default function Art({ expression = "xy+", dynamic = true }) {
       precision mediump float;
       #define PI 3.1415926538
       #define SIZE 16.0
-      #define BAYER_SIZE 8.0
+      #define BAYER_SIZE 4.0
       varying vec2 uv;
       uniform sampler2D palette; // 16 colors
       uniform sampler2D bayer; // 8x8 bayer matrix
@@ -43,13 +50,13 @@ export default function Art({ expression = "xy+", dynamic = true }) {
       void main () {
         float x = floor(uv.x * SIZE);
         float y = floor(-uv.y * SIZE);
-        float t = time * 2.;
+        float t = time * 3.;
         float i = x * SIZE * 2. + y;
 
         float bayerValue = texture2D(bayer, vec2(
-          mod(uv.x * 128., BAYER_SIZE) / BAYER_SIZE,
-          mod(uv.y * 128., BAYER_SIZE) / BAYER_SIZE
-        )).r / 4.;
+          mod(uv.x * 64., BAYER_SIZE * 1.0) / BAYER_SIZE * 1.,
+          mod(uv.y * 64., BAYER_SIZE * 1.0) / BAYER_SIZE * 1.
+        )).r / 1.;
 
         float value = mod(${transpile(expression)} / 16. + bayerValue, 1.0);
         gl_FragColor = texture2D(palette, vec2(value, 0.0));
@@ -111,7 +118,7 @@ export default function Art({ expression = "xy+", dynamic = true }) {
     <>
       <div className="p-3 shadow-lg bg-white">
         <Link href={encodeURIComponent(expression)}>
-          <canvas ref={canvas} width={768} height={768} className="" />
+          <canvas ref={canvas} width={256} height={256} className="" />
         </Link>
       </div>
       <button onClick={handleDownload} className="">download</button>

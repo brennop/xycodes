@@ -89,7 +89,7 @@ const lookup: Record<string, Op> = {
   ".": {
     fn: (s) => [s.slice(s.length / 2).reduce((a, n, i) => a + n * s[i], 0)],
     decode: (s) => [[".", ...s.reverse()]],
-    compile: ([a,b,c,d]) => [`(${a} * ${c} + ${b} * ${d})`],
+    compile: (s) => [`(${s.slice(s.length / 2).reduce((a, n, i) => `${a} + ${n} * ${s[i]}`, "0.")})`],
     description: "dot product",
   },
 
