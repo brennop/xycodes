@@ -82,7 +82,10 @@ export default function Home() {
         ];
 
         if (expression !== detected.decode()) {
-          setExpression(detected.decode());
+          const decoded = detected.decode();
+          const url = new URL(decoded);
+          console.log(url.pathname.slice(1));
+          setExpression(url.pathname.slice(1));
         }
 
         if (!visible) {
