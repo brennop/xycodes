@@ -7,8 +7,11 @@ const { scanImageData } = require("@undecaf/zbar-wasm") as {
   scanImageData: typeof ScanImageData;
 };
 
+const TIME_TO_LIVE = 1000;
+
 export default function Home() {
   const [expression, setExpression] = useState<string>("xy+t+");
+  const [visible, setVisible] = useState<boolean>(false);
 
   const fallbackCanvasRef = useRef<HTMLCanvasElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -18,6 +21,7 @@ export default function Home() {
   });
 
   const animateRef = useRef<number | null>(null);
+  const lastScanRef = useRef<number>(0);
 
   const [width, setWidth] = useState(640);
   const [height, setHeight] = useState(480);
@@ -34,7 +38,7 @@ export default function Home() {
       });
   }, []);
 
-  const animate = () => {
+  const animate = (t) => {
     const video = videoRef.current!;
     const fallbackCanvas = fallbackCanvasRef.current!;
     const context = fallbackCanvas.getContext("2d")!;
@@ -53,7 +57,13 @@ export default function Home() {
     );
 
     scanImageData(imageData).then(([detected]) => {
+      if (t - lastScanRef.current < TIME_TO_LIVE) {
+        setVisible(false);
+      }
+
       if (detected) {
+        lastScanRef.current = t;
+
         const { points } = detected;
         const transformedPoints = points.map(
           ({ x, y }: { x: number; y: number }) => [
@@ -71,9 +81,15 @@ export default function Home() {
           transformedPoints[3],
         ];
 
-        setExpression(detected.decode());
-      }
+        if (expression !== detected.decode()) {
+          setExpression(detected.decode());
+        }
 
+        if (!visible) {
+          setVisible(true);
+        }
+      }
+    }).finally(() => {
       animateRef.current = requestAnimationFrame(animate);
     });
   };
@@ -121,7 +137,7 @@ export default function Home() {
         ref={targetCanvasRef}
         width={width}
         height={height}
-        className="absolute left-1/2 m-auto transform -translate-x-1/2 overflow-hidden"
+        className={`absolute left-1/2 m-auto transform -translate-x-1/2 ${visible ? "opacity-100" : "opacity-0"}`}
       />
     </div>
   );
