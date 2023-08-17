@@ -37,22 +37,6 @@ export function _eval(expr: string, x: number, y: number, t: number, i: number) 
   return stack;
 }
 
-export function draw(context: CanvasRenderingContext2D, expr: string, t: number) {
-  for (let i = 0; i < SIZE; i++) {
-    for (let j = 0; j < SIZE; j++) {
-      const [value] = _eval(expr, i, j, t * TIMESCALE, i * SIZE + j);
-      const color = palette[Math.floor(value) & 0xf];
-      context.fillStyle = color;
-      context.fillRect(
-        i * PIXEL_SIZE,
-        j * PIXEL_SIZE,
-        PIXEL_SIZE,
-        PIXEL_SIZE
-      );
-    }
-  }
-}
-
 export function getPixels(expr: string): number[][][] {
   return [...Array(SIZE)].map((_, j) => [...Array(SIZE)].map((_, i) => {
     const [value] = _eval(expr, i, j, 1, i * SIZE + j);

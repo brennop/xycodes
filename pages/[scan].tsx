@@ -38,7 +38,7 @@ export default function Home() {
       });
   }, []);
 
-  const animate = (t) => {
+  const animate = (t: number) => {
     const video = videoRef.current!;
     const fallbackCanvas = fallbackCanvasRef.current!;
     const context = fallbackCanvas.getContext("2d")!;
@@ -56,45 +56,51 @@ export default function Home() {
       video.videoHeight,
     );
 
-    scanImageData(imageData).then(([detected]) => {
-      if (t - lastScanRef.current < TIME_TO_LIVE) {
-        setVisible(false);
-      }
-
-      if (detected) {
-        lastScanRef.current = t;
-
-        const { points } = detected;
-        const transformedPoints = points.map(
-          ({ x, y }: { x: number; y: number }) => [
-            (x / video.videoWidth) * 2 - 1,
-            (y / video.videoHeight) * -2 + 1,
-          ],
-        );
-
-        pointsRef.current = [
-          transformedPoints[0],
-          transformedPoints[1],
-          transformedPoints[2],
-          transformedPoints[0],
-          transformedPoints[2],
-          transformedPoints[3],
-        ];
-
-        if (expression !== detected.decode()) {
-          const decoded = detected.decode();
-          const url = new URL(decoded);
-          console.log(url.pathname.slice(1));
-          setExpression(url.pathname.slice(1));
+    scanImageData(imageData)
+      .then(([detected]) => {
+        if (t - lastScanRef.current < TIME_TO_LIVE) {
+          setVisible(false);
         }
 
-        if (!visible) {
-          setVisible(true);
+        if (detected) {
+          lastScanRef.current = t;
+
+          const { points } = detected;
+          const transformedPoints = points.map(
+            ({ x, y }: { x: number; y: number }) => [
+              (x / video.videoWidth) * 2 - 1,
+              (y / video.videoHeight) * -2 + 1,
+            ],
+          );
+
+          pointsRef.current = [
+            transformedPoints[0],
+            transformedPoints[1],
+            transformedPoints[2],
+            transformedPoints[0],
+            transformedPoints[2],
+            transformedPoints[3],
+          ];
+
+          if (expression !== detected.decode()) {
+            const decoded = detected.decode();
+            try {
+              const url = new URL(decoded);
+              console.log(url.pathname.slice(1));
+              setExpression(url.pathname.slice(1));
+            } catch (e) {
+              setExpression(decoded);
+            }
+          }
+
+          if (!visible) {
+            setVisible(true);
+          }
         }
-      }
-    }).finally(() => {
-      animateRef.current = requestAnimationFrame(animate);
-    });
+      })
+      .finally(() => {
+        animateRef.current = requestAnimationFrame(animate);
+      });
   };
 
   useEffect(() => {
@@ -104,23 +110,24 @@ export default function Home() {
 
   useEffect(() => {
     const handler = () => {
-      const scale = videoRef.current ? Math.max(
-        window.innerWidth / videoRef.current.videoWidth,
-        window.innerHeight / videoRef.current.videoHeight,
-      ) : 1;
+      const scale = videoRef.current
+        ? Math.max(
+            window.innerWidth / videoRef.current.videoWidth,
+            window.innerHeight / videoRef.current.videoHeight,
+          )
+        : 1;
 
       setWidth(videoRef.current!.videoWidth * scale);
       setHeight(videoRef.current!.videoHeight * scale);
-    }
+    };
 
     window.addEventListener("resize", handler);
     videoRef.current!.addEventListener("loadedmetadata", handler);
-    return () => { 
+    return () => {
       window.removeEventListener("resize", handler);
       videoRef.current!.removeEventListener("loadedmetadata", handler);
     };
   }, []);
-
 
   return (
     <div className="ios-notch">
@@ -140,7 +147,9 @@ export default function Home() {
         ref={targetCanvasRef}
         width={width}
         height={height}
-        className={`absolute left-1/2 m-auto transform -translate-x-1/2 ${visible ? "opacity-100" : "opacity-0"}`}
+        className={`absolute left-1/2 m-auto transform -translate-x-1/2 ${
+          visible ? "opacity-100" : "opacity-0"
+        }`}
       />
     </div>
   );

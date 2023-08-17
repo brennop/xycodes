@@ -21,13 +21,13 @@ export default function useArt(
   const canvas = useRef<HTMLCanvasElement>(null);
   const regl = useRef<ReturnType<typeof createREGL>>();
   const position = useRef<number[][]>([
-            [-1, -1],
-            [-1, 1],
-            [1, 1],
-            [-1, -1],
-            [1, 1],
-            [1, -1],
-          ]);
+    [-1, -1],
+    [-1, 1],
+    [1, 1],
+    [-1, -1],
+    [1, 1],
+    [1, -1],
+  ]);
 
   useEffect(() => {
     if (!canvas.current) return;
@@ -77,7 +77,9 @@ export default function useArt(
         attributes: {
           // quad vertex positions
           // we pass two triangles to draw a quad
-          position: regl.current.prop("position"),
+          position: regl.current.prop<{ position: number[][] }, "position">(
+            "position",
+          ),
           // uv coordinates
           uvs: [
             [-1, -1],
