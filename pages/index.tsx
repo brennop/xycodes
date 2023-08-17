@@ -1,12 +1,17 @@
 import { useRef, useState, useEffect } from "react";
 import useArt from "../lib/useArt";
-const { scanImageData } = require("@undecaf/zbar-wasm");
+
+// only require works for this package
+import type { scanImageData as ScanImageData } from "@undecaf/zbar-wasm";
+const { scanImageData } = require("@undecaf/zbar-wasm") as { scanImageData: typeof ScanImageData };
 
 export default function Home() {
+  const [expression, setExpression] = useState<string>("xy+t+");
+
   const fallbackCanvasRef = useRef<HTMLCanvasElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  const { canvas: targetCanvasRef, position: pointsRef } = useArt("xy+t+", {
+  const { canvas: targetCanvasRef, position: pointsRef } = useArt(expression, {
     dynamic: true,
   });
 
@@ -24,7 +29,6 @@ export default function Home() {
       })
       .then((stream) => {
         videoRef.current!.srcObject = stream;
-        videoRef.current!.play();
       });
   }, []);
 
@@ -64,6 +68,8 @@ export default function Home() {
           transformedPoints[2],
           transformedPoints[3],
         ];
+
+        setExpression(detected.decode());
       }
 
       animateRef.current = requestAnimationFrame(animate);
