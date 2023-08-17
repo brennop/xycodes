@@ -85,7 +85,7 @@ export default function Home() {
 
   useEffect(() => {
     const handler = () => {
-      const scale = videoRef.current ? Math.min(
+      const scale = videoRef.current ? Math.max(
         window.innerWidth / videoRef.current.videoWidth,
         window.innerHeight / videoRef.current.videoHeight,
       ) : 1;
@@ -104,7 +104,7 @@ export default function Home() {
 
 
   return (
-    <div>
+    <div className="ios-notch">
       <canvas
         ref={fallbackCanvasRef}
         width={width}
@@ -115,13 +115,13 @@ export default function Home() {
         autoPlay
         playsInline
         ref={videoRef}
-        className="absolute inset-0 w-full h-full"
+        className="absolute inset-0 w-full h-full object-cover"
       />
       <canvas
         ref={targetCanvasRef}
         width={width}
         height={height}
-        className="absolute inset-0 m-auto"
+        className="absolute left-1/2 m-auto transform -translate-x-1/2 overflow-hidden"
       />
     </div>
   );
