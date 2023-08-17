@@ -3,7 +3,9 @@ import useArt from "../lib/useArt";
 
 // only require works for this package
 import type { scanImageData as ScanImageData } from "@undecaf/zbar-wasm";
-const { scanImageData } = require("@undecaf/zbar-wasm") as { scanImageData: typeof ScanImageData };
+const { scanImageData } = require("@undecaf/zbar-wasm") as {
+  scanImageData: typeof ScanImageData;
+};
 
 export default function Home() {
   const [expression, setExpression] = useState<string>("xy+t+");
@@ -81,11 +83,46 @@ export default function Home() {
     return () => cancelAnimationFrame(animateRef!.current!);
   }, []);
 
+  useEffect(() => {
+    const handler = () => {
+      const scale = videoRef.current ? Math.min(
+        window.innerWidth / videoRef.current.videoWidth,
+        window.innerHeight / videoRef.current.videoHeight,
+      ) : 1;
+
+      setWidth(videoRef.current!.videoWidth * scale);
+      setHeight(videoRef.current!.videoHeight * scale);
+    }
+
+    window.addEventListener("resize", handler);
+    videoRef.current!.addEventListener("loadedmetadata", handler);
+    return () => { 
+      window.removeEventListener("resize", handler);
+      videoRef.current!.removeEventListener("loadedmetadata", handler);
+    };
+  }, []);
+
+
   return (
     <div>
-      <canvas ref={fallbackCanvasRef} width={width} height={height} />
-      <video autoPlay playsInline ref={videoRef} />
-      <canvas ref={targetCanvasRef} width={width} height={height} />
+      <canvas
+        ref={fallbackCanvasRef}
+        width={width}
+        height={height}
+        className="opacity-0 absolute"
+      />
+      <video
+        autoPlay
+        playsInline
+        ref={videoRef}
+        className="absolute inset-0 w-full h-full"
+      />
+      <canvas
+        ref={targetCanvasRef}
+        width={width}
+        height={height}
+        className="absolute inset-0 m-auto"
+      />
     </div>
   );
 }

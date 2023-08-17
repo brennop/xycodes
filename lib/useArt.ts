@@ -99,7 +99,7 @@ export default function useArt(
       const frame = regl.current.frame(() => {
         if (!dynamic) return;
         regl.current!.clear({
-          color: [0, 0, 0, 1],
+          color: [0, 0, 0, 0],
           depth: 1,
         });
         drawFrame({
