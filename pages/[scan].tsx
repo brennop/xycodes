@@ -8,7 +8,7 @@ const { scanImageData } = require("@undecaf/zbar-wasm") as {
   scanImageData: typeof ScanImageData;
 };
 
-const TIME_TO_LIVE = 2000;
+const TIME_TO_LIVE = 500;
 
 export default function Home() {
   const [expression, setExpression] = useState<string>("xy+t+");
@@ -57,11 +57,12 @@ export default function Home() {
       video.videoHeight,
     );
 
+    if (t - lastScanRef.current > TIME_TO_LIVE) {
+      setVisible(false);
+    }
+
     scanImageData(imageData)
       .then(([detected]) => {
-        if (t - lastScanRef.current < TIME_TO_LIVE) {
-          setVisible(false);
-        }
 
         if (detected) {
           lastScanRef.current = t;
