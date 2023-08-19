@@ -177,9 +177,10 @@ export default function Home() {
       context.textAlign = "center";
       context.textBaseline = "middle";
       context.globalCompositeOperation = "difference";
+      const offset = 300;
 
-      context.fillText("qrxy", canvas.width / 2, 120 * 1.5);
-      context.fillText(expression, canvas.width / 2, canvas.height - 120 * 1.5);
+      context.fillText("qrxy", canvas.width / 2, offset);
+      context.fillText(expression, canvas.width / 2, canvas.height - offset);
 
       canvas.toBlob((blob) => {
         const file = new File([blob!], "qrxy-capture.png", {
