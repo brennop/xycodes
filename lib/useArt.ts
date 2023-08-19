@@ -1,5 +1,7 @@
 import { useRef, useEffect } from "react";
 import createREGL from "regl";
+
+// @ts-ignore
 import noise from "./noise.glsl";
 
 import { palette, transpile } from "../lib/draw";
