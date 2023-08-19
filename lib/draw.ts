@@ -1,5 +1,4 @@
-import lookup, { Expr } from './lookup';
-import { decode } from "../lib/decode"
+import lookup from './lookup';
 
 // define a 16 colors palette
 // https://lospec.com/palette-list/taffy-16
@@ -21,29 +20,6 @@ export const palette = [
   [0x56, 0x6c, 0x86],
   [0x33, 0x3c, 0x57],
 ];
-
-
-const SIZE = 32;
-const CANVAS_SIZE = 256;
-const PIXEL_SIZE = CANVAS_SIZE / SIZE;
-const TIMESCALE = 1 / 256;
-
-export function _eval(expr: string, x: number, y: number, t: number, i: number) {
-  let stack: number[] = [];
-  for (const op of expr) {
-    const fn = lookup[op].fn;
-    stack = fn(stack, { x, y, t, i });
-  }
-  return stack;
-}
-
-export function getPixels(expr: string): number[][][] {
-  return [...Array(SIZE)].map((_, j) => [...Array(SIZE)].map((_, i) => {
-    const [value] = _eval(expr, i, j, 1, i * SIZE + j);
-    const color = palette[Math.floor(value) & 0xf];
-    return color;
-  }));
-}
 
 export function transpile(expr: string): string {
   const [result] = [...expr].reduce((s, c) => {

@@ -4,7 +4,7 @@ export async function record(canvas: HTMLCanvasElement, duration: number) {
     const stream = canvas.captureStream(30);
     const recorder = new MediaRecorder(stream!, {
       videoBitsPerSecond: 2500 * 1000 * 10,
-    })//, { mimeType: "video/webm;codecs=h264" });
+    });
 
     recorder.ondataavailable = (e) => {
       if (e.data.size) recordedChunks.push(e.data);
