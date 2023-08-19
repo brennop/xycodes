@@ -270,6 +270,7 @@ const lookup: Record<string, Op> = {
   E: {
     fn: ([a, ...s]) => [Math.exp(a), ...s],
     decode: ([a, ...s]) => [["E", a], ...s],
+    compile: ([a, ...s]) => [`exp(${a})`, ...s],
     description: "exp(a)",
   },
   F: {
