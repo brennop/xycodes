@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 import useArt from "../lib/useArt";
+import { font } from "./_app";
 
 // only require works for this package
 import type { scanImageData as ScanImageData } from "@undecaf/zbar-wasm";
@@ -7,7 +8,7 @@ const { scanImageData } = require("@undecaf/zbar-wasm") as {
   scanImageData: typeof ScanImageData;
 };
 
-const TIME_TO_LIVE = 1000;
+const TIME_TO_LIVE = 2000;
 
 export default function Home() {
   const [expression, setExpression] = useState<string>("xy+t+");
@@ -86,7 +87,6 @@ export default function Home() {
             const decoded = detected.decode();
             try {
               const url = new URL(decoded);
-              console.log(url.pathname.slice(1));
               setExpression(url.pathname.slice(1));
             } catch (e) {
               setExpression(decoded);
@@ -129,6 +129,74 @@ export default function Home() {
     };
   }, []);
 
+  const handleCapture = () => {
+    const video = videoRef.current!;
+    const targetCanvas = targetCanvasRef.current!;
+
+    const canvas = document.createElement("canvas");
+
+    canvas.width = 1080;
+    canvas.height = 1920;
+
+    const context = canvas.getContext("2d")!;
+
+    // clear canvas
+    context.clearRect(0, 0, video.videoWidth, video.videoHeight);
+
+    const artContext = targetCanvas.getContext("webgl", {
+      preserveDrawingBuffer: true,
+    })!;
+
+    const scale = Math.max(
+      canvas.width / video.videoWidth,
+      canvas.height / video.videoHeight,
+    );
+
+    const x = (canvas.width - video.videoWidth * scale) / 2;
+    const y = (canvas.height - video.videoHeight * scale) / 2;
+
+    requestAnimationFrame(() => {
+      context.drawImage(
+        video,
+        x,
+        y,
+        video.videoWidth * scale,
+        video.videoHeight * scale,
+      );
+      context.drawImage(
+        artContext.canvas,
+        x,
+        y,
+        video.videoWidth * scale,
+        video.videoHeight * scale,
+      );
+
+      context.font = `bold 64px ${font.style.fontFamily}`;
+      context.fillStyle = "#fff";
+      context.textAlign = "center";
+      context.textBaseline = "middle";
+      context.globalCompositeOperation = "difference";
+
+      context.fillText("qrxy", canvas.width / 2, 120 * 1.5);
+      context.fillText(expression, canvas.width / 2, canvas.height - 120 * 1.5);
+
+      canvas.toBlob((blob) => {
+        const file = new File([blob!], "qrxy-capture.png", {
+          type: "image/png",
+        });
+        // @ts-ignore
+        if (navigator.canShare) {
+          navigator.share({ files: [file] });
+        } else {
+          const url = URL.createObjectURL(file);
+          window.open(url, "_blank");
+        }
+      });
+
+      canvas.remove();
+    });
+  };
+
   return (
     <div className="ios-notch">
       <canvas
@@ -151,6 +219,18 @@ export default function Home() {
           visible ? "opacity-100" : "opacity-0"
         }`}
       />
+      {visible ? (
+        <button
+          className="absolute p-4 text-4xl text-white bg-gray-900 shadow-md rounded-lg bottom-8 left-1/2 transform -translate-x-1/2 w-max"
+          onClick={handleCapture}
+        >
+          capturar 📸
+        </button>
+      ) : (
+        <span className="absolute p-4 text-[4vw] text-white drop-shadow-lg bottom-8 left-1/2 transform -translate-x-1/2 w-max">
+          aponte a câmera para um QR Code
+        </span>
+      )}
     </div>
   );
 }
