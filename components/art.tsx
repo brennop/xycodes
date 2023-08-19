@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Link from 'next/link';
 
 import { download, record } from "../lib/download";
@@ -5,7 +6,10 @@ import useArt from "../lib/useArt";
 import Tilt from 'react-parallax-tilt';
 
 export default function Art({ expression = "xy+", dynamic = true }) {
-  const { canvas } = useArt(expression, { dynamic });
+  const [hover, setHover] = useState(false);
+  const { canvas } = useArt(expression, { 
+    dynamic: hover || dynamic,
+  });
 
   const handleDownload = async () => {
     const blob = await record(canvas.current!, 5000);
@@ -19,6 +23,8 @@ export default function Art({ expression = "xy+", dynamic = true }) {
         glarePosition="all"
         gyroscope
         scale={1.1}
+        onEnter={() => setHover(true)}
+        onLeave={() => setHover(false)}
       >
         <div className="p-3 shadow-lg rounded-lg bg-white">
           <Link href={encodeURIComponent(expression)} className="hover:cursor-none">

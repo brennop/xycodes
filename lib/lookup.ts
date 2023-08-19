@@ -264,6 +264,7 @@ const lookup: Record<string, Op> = {
   z: {
     fn: (s) => s,
     decode: ([a, b, c, ...s]) => [["z", c, b, a], ...s],
+    compile: ([a, b, c, d, ...s]) => [`snoise(vec4(${a || "0."}, ${b || "0."}, ${c || "0."}, ${d || "0."}))`, ...s],
     description: "noise(a, b)",
   },
   A: {

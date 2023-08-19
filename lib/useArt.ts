@@ -1,5 +1,6 @@
 import { useRef, useEffect } from "react";
 import createREGL from "regl";
+import noise from "./noise.glsl";
 
 import { palette, transpile } from "../lib/draw";
 
@@ -41,6 +42,9 @@ export default function useArt(
       const drawFrame = regl.current({
         frag: `
       precision mediump float;
+
+      ${noise}
+
       #define PI 3.1415926538
       #define SIZE 16.0
       #define BAYER_SIZE 4.0
@@ -96,6 +100,10 @@ export default function useArt(
           bayer: regl.current.texture(bayerMatrix),
         },
         count: 6,
+      });
+
+      drawFrame({
+        position: position?.current,
       });
 
       const frame = regl.current.frame(() => {
