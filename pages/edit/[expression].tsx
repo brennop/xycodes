@@ -2,10 +2,10 @@ import { useState, useEffect, useMemo } from 'react';
 import Head from 'next/head'
 import { GetServerSideProps } from 'next'
 
-import Art from "../components/art";
-import gallery from "../lib/gallery";
-import { decode } from "../lib/decode"
-import Decoded from '../components/decoded';
+import Art from "../../components/art";
+import gallery from "../../lib/gallery";
+import { decode } from "../../lib/decode"
+import Decoded from '../../components/decoded';
 
 const websiteUrl = "https://xycodes.vercel.app";
 
@@ -19,7 +19,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 }
 
-export default function Home({ expression: initial }: { expression: string }) {
+export default function Expression({ expression: initial }: { expression: string }) {
   const [expression, setExpression] = useState<string>(initial as string || "xy+")
 
   useEffect(() => {
@@ -49,11 +49,6 @@ export default function Home({ expression: initial }: { expression: string }) {
         <div className="text-gray-500 mt-3 max-w-xs cursor-default">
           {decoded && <Decoded expression={decoded} />}
         </div>
-      </div>
-    </div>
-    <div className="bg-gray-100">
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(256px,1fr))] justify-items-center gap-4 p-4">
-        {gallery.map((expression) => <Art expression={expression} key={expression} dynamic={false} />)}
       </div>
     </div>
   </div>

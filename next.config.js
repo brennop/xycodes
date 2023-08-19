@@ -1,16 +1,31 @@
+const CopyPlugin = require('copy-webpack-plugin')
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  redirects: async () => {
-    // redirect "/" to "/xy%2B"
-    return [
-      {
-        source: '/',
-        destination: '/xy%2B',
-        permanent: false,
-      },
-    ]
-  },
+  webpack: (config, { isServer }) => {
+   config.plugins.push(new CopyPlugin({
+      patterns: [
+        {
+          // In this project, zbar-wasm becomes part of static/chunks/pages/_app.js
+          from: 'node_modules/@undecaf/zbar-wasm/dist/zbar.wasm',
+          to: 'static/chunks/pages/'
+        },
+      ],
+    }))
+
+    if (!isServer) {
+      // Resolve node modules that are irrelevant for the client
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+
+        fs: false,
+        path: false,
+      }
+    }
+
+    return config
+  }
 }
 
 module.exports = nextConfig

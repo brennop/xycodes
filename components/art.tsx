@@ -1,34 +1,11 @@
-import { useRef, useEffect, useState } from "react";
 import Link from 'next/link';
 
+import { download, record } from "../lib/download";
+import useArt from "../lib/useArt";
 import Tilt from 'react-parallax-tilt';
 
-import { draw } from "../lib/draw";
-import { record, download } from "../lib/download"
-
 export default function Art({ expression = "xy+", dynamic = true }) {
-  const canvas = useRef<HTMLCanvasElement>(null);
-
-  const [hovering, setHovering] = useState(false);
-
-  // schedule a draw on the next frame
-  // and return a function to cancel it
-  useEffect(() => {
-    let frameId: number;
-    const ctx = canvas.current?.getContext("2d");
-
-    function render(time: number) {
-      if (ctx) draw(ctx, expression, time);
-
-      if (!dynamic && !hovering) return;
-
-      frameId = requestAnimationFrame(render);
-    }
-
-    frameId = requestAnimationFrame(render);
-
-    return () => cancelAnimationFrame(frameId);
-  }, [expression, dynamic, hovering]);
+  const { canvas } = useArt(expression, { dynamic });
 
   const handleDownload = async () => {
     const blob = await record(canvas.current!, 5000);
@@ -42,8 +19,6 @@ export default function Art({ expression = "xy+", dynamic = true }) {
         glarePosition="all"
         gyroscope
         scale={1.1}
-        onEnter={() => setHovering(true)}
-        onLeave={() => setHovering(false)}
       >
         <div className="p-3 shadow-lg rounded-lg bg-white">
           <Link href={encodeURIComponent(expression)} className="hover:cursor-none">

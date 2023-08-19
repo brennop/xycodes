@@ -2,7 +2,9 @@ export async function record(canvas: HTMLCanvasElement, duration: number) {
   const recordedChunks: Blob[] = [];
   return new Promise<Blob>((resolve, reject) => {
     const stream = canvas.captureStream(30);
-    const recorder = new MediaRecorder(stream!);
+    const recorder = new MediaRecorder(stream!, {
+      videoBitsPerSecond: 2500 * 1000 * 10,
+    });
 
     recorder.ondataavailable = (e) => {
       if (e.data.size) recordedChunks.push(e.data);
