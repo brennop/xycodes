@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect } from "react";
 import useArt from "../lib/useArt";
 import { font } from "./_app";
+import Head from "next/head";
 
 // only require works for this package
 import type { scanImageData as ScanImageData } from "@undecaf/zbar-wasm";
@@ -36,12 +37,18 @@ export default function Home() {
       })
       .then((stream) => {
         videoRef.current!.srcObject = stream;
+        fallbackCanvasRef.current = document.createElement("canvas");
       });
   }, []);
 
   const animate = (t: number) => {
-    const video = videoRef.current!;
-    const fallbackCanvas = fallbackCanvasRef.current!;
+    if (!videoRef.current || !fallbackCanvasRef.current) {
+      animateRef.current = requestAnimationFrame(animate);
+      return;
+    }
+
+    const video = videoRef.current;
+    const fallbackCanvas = fallbackCanvasRef.current;
     const context = fallbackCanvas.getContext("2d")!;
 
     if (!context || !video.videoWidth || !video.videoHeight) {
@@ -67,11 +74,16 @@ export default function Home() {
         if (detected) {
           lastScanRef.current = t;
 
+          const scale = Math.min(
+            window.innerWidth / video.videoWidth,
+            window.innerHeight / video.videoHeight,
+          )
+
           const { points } = detected;
           const transformedPoints = points.map(
             ({ x, y }: { x: number; y: number }) => [
-              (x / video.videoWidth) * 2 - 1,
-              (y / video.videoHeight) * -2 + 1,
+              ((x / video.videoWidth) * 2 - 1) / scale,
+              ((y / video.videoHeight) * -2 + 1),
             ],
           );
 
@@ -111,15 +123,11 @@ export default function Home() {
 
   useEffect(() => {
     const handler = () => {
-      const scale = videoRef.current
-        ? Math.max(
-            window.innerWidth / videoRef.current.videoWidth,
-            window.innerHeight / videoRef.current.videoHeight,
-          )
-        : 1;
+      setWidth(videoRef.current!.clientWidth);
+      setHeight(videoRef.current!.clientHeight);
 
-      setWidth(videoRef.current!.videoWidth * scale);
-      setHeight(videoRef.current!.videoHeight * scale);
+      fallbackCanvasRef.current!.width = width;
+      fallbackCanvasRef.current!.height = height;
     };
 
     window.addEventListener("resize", handler);
@@ -201,12 +209,6 @@ export default function Home() {
 
   return (
     <div className="ios-notch">
-      <canvas
-        ref={fallbackCanvasRef}
-        width={width}
-        height={height}
-        className="opacity-0 absolute"
-      />
       <video
         autoPlay
         playsInline
@@ -217,9 +219,8 @@ export default function Home() {
         ref={targetCanvasRef}
         width={width}
         height={height}
-        className={`absolute left-1/2 m-auto transform -translate-x-1/2 ${
-          visible ? "opacity-100" : "opacity-0"
-        }`}
+        className={`absolute left-1/2 m-auto transform -translate-x-1/2 ${visible ? "opacity-100" : "opacity-0"
+          }`}
       />
       {visible ? (
         <button
