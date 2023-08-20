@@ -49,7 +49,35 @@ export default function Home() {
       return;
     }
 
-    context.drawImage(video, 0, 0);
+    const scale = Math.max(
+      width / video.videoWidth,
+      height / video.videoHeight,
+    );
+    const mScale = Math.min(
+      video.videoWidth / width,
+      video.videoHeight / height,
+    );
+
+    const scaledWidth = video.videoWidth * scale;
+    const scaledHeight = video.videoHeight * scale;
+
+    const sourceWidth = width * mScale;
+    const sourceHeight = height * mScale;
+
+    const xOff = (scaledWidth - width) / 2;
+    const yOff = (scaledHeight - height) / 2;
+
+    context.drawImage(
+      video,
+      xOff,
+      yOff,
+      sourceWidth,
+      sourceHeight,
+      0,
+      0,
+      width,
+      height,
+    );
     const imageData = context.getImageData(
       0,
       0,
@@ -63,15 +91,14 @@ export default function Home() {
 
     scanImageData(imageData)
       .then(([detected]) => {
-
         if (detected) {
           lastScanRef.current = t;
 
           const { points } = detected;
           const transformedPoints = points.map(
             ({ x, y }: { x: number; y: number }) => [
-              (x / video.videoWidth) * 2 - 1,
-              (y / video.videoHeight) * -2 + 1,
+              (x / width) * 2 - 1,
+              (y / height) * -2 + 1,
             ],
           );
 
@@ -111,22 +138,14 @@ export default function Home() {
 
   useEffect(() => {
     const handler = () => {
-      const scale = videoRef.current
-        ? Math.max(
-            window.innerWidth / videoRef.current.videoWidth,
-            window.innerHeight / videoRef.current.videoHeight,
-          )
-        : 1;
-
-      setWidth(videoRef.current!.videoWidth * scale);
-      setHeight(videoRef.current!.videoHeight * scale);
+      setWidth(window.innerWidth);
+      setHeight(window.innerHeight);
     };
 
+    handler();
     window.addEventListener("resize", handler);
-    videoRef.current!.addEventListener("loadedmetadata", handler);
     return () => {
       window.removeEventListener("resize", handler);
-      videoRef.current!.removeEventListener("loadedmetadata", handler);
     };
   }, []);
 
