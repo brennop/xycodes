@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect } from "react";
 import useArt from "../lib/useArt";
 import { font } from "./_app";
+import Head from "next/head";
 
 // only require works for this package
 import type { scanImageData as ScanImageData } from "@undecaf/zbar-wasm";
@@ -111,11 +112,12 @@ export default function Home() {
 
   useEffect(() => {
     const handler = () => {
+      const pixelRatio = window.devicePixelRatio || 1;
       const scale = videoRef.current
         ? Math.max(
-            window.innerWidth / videoRef.current.videoWidth,
-            window.innerHeight / videoRef.current.videoHeight,
-          )
+            window.innerWidth / videoRef.current!.videoWidth,
+            window.innerHeight / videoRef.current!.videoHeight,
+          ) / pixelRatio
         : 1;
 
       setWidth(videoRef.current!.videoWidth * scale);
@@ -200,7 +202,11 @@ export default function Home() {
   };
 
   return (
-    <div className="ios-notch">
+    <>
+      <Head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+        <title>qrxy</title>
+      </Head>
       <canvas
         ref={fallbackCanvasRef}
         width={width}
@@ -233,6 +239,6 @@ export default function Home() {
           aponte a câmera para um QR Code
         </span>
       )}
-    </div>
+    </>
   );
 }

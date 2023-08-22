@@ -1,30 +1,15 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import Head from 'next/head'
-import { GetServerSideProps } from 'next'
 
-import Art from "../../components/art";
-import gallery from "../../lib/gallery";
-import { decode } from "../../lib/decode"
-import Decoded from '../../components/decoded';
+import Art from "../components/art";
+import gallery from "../lib/gallery";
+import { decode } from "../lib/decode"
+import Decoded from '../components/decoded';
 
 const websiteUrl = "https://xycodes.vercel.app";
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { expression } = context.params!;
-
-  return {
-    props: {
-      expression,
-    },
-  };
-}
-
-export default function Expression({ expression: initial }: { expression: string }) {
-  const [expression, setExpression] = useState<string>(initial as string || "xy+")
-
-  useEffect(() => {
-    setExpression(initial as string)
-  }, [initial])
+export default function Expression() {
+  const [expression, setExpression] = useState<string>("xy+")
 
   const decoded = useMemo(() => {
     if (expression === undefined) return undefined
