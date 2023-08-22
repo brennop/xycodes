@@ -10,6 +10,11 @@ const { scanImageData } = require("@undecaf/zbar-wasm") as {
 };
 
 const TIME_TO_LIVE = 500;
+const LERP = 0.7;
+
+function lerp(a: number, b: number, t: number) {
+  return a * (1 - t) + b * t;
+}
 
 export default function Home() {
   const [expression, setExpression] = useState<string>("xy+t+");
@@ -17,6 +22,7 @@ export default function Home() {
 
   const fallbackCanvasRef = useRef<HTMLCanvasElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const lerpRef = useRef<number[][]>([]);
 
   const { canvas: targetCanvasRef, position: pointsRef } = useArt(expression, {
     dynamic: true,
@@ -76,13 +82,22 @@ export default function Home() {
             ],
           );
 
+          if (lerpRef.current.length === 0) {
+            lerpRef.current = transformedPoints;
+          } else {
+            lerpRef.current = lerpRef.current.map((point, i) => [
+              lerp(point[0], transformedPoints[i][0], LERP),
+              lerp(point[1], transformedPoints[i][1], LERP),
+            ]);
+          }
+
           pointsRef.current = [
-            transformedPoints[0],
-            transformedPoints[1],
-            transformedPoints[2],
-            transformedPoints[0],
-            transformedPoints[2],
-            transformedPoints[3],
+            lerpRef.current[0],
+            lerpRef.current[1],
+            lerpRef.current[2],
+            lerpRef.current[0],
+            lerpRef.current[2],
+            lerpRef.current[3],
           ];
 
           if (expression !== detected.decode()) {
@@ -117,7 +132,7 @@ export default function Home() {
         ? Math.max(
             window.innerWidth / videoRef.current!.videoWidth,
             window.innerHeight / videoRef.current!.videoHeight,
-          ) / pixelRatio
+          ) 
         : 1;
 
       setWidth(videoRef.current!.videoWidth * scale);
