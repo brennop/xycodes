@@ -127,7 +127,6 @@ export default function Home() {
 
   useEffect(() => {
     const handler = () => {
-      const pixelRatio = window.devicePixelRatio || 1;
       const scale = videoRef.current
         ? Math.max(
             window.innerWidth / videoRef.current!.videoWidth,
